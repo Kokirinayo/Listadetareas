@@ -1,0 +1,90 @@
+#SISTEMA DE GESTION DE TAREAS DIARIO REALIZADO POR NOEMI LOPEZ OLIVARES 15/0/2024
+
+class Tarea:   #Clase Tarea - Esta clase representa una tarea individual.
+    def __init__(self, descripcion):  #__init__ Es el método constructor que se llama cuando se crea una nueva instancia de Tarea.
+        self.completada = False         #Toma una descripción de la tarea y la marca como no completada (False).
+
+    def marcar_completada(self):
+        self.completada = True     #Método que marca la tarea como "Completada"
+
+    def __str__(self):
+        estado = "Completada" if self.completada else "Pendiente"  #Esta linea utiliza una expresion condicional, para determinar el estado
+        return f"{self.descripcion} - {estado}"                     # de la tarea , si self.completada es TRUE significa que la tarea está completada
+                                                                    ##y se establecera como tarea completada, si el self.completada es FALSE, #se establecerá como tarea
+class ListaDeTareas:                                                
+    def __init__(self):                     # __init__ Método constructor de la clase ListaDeTareas
+        self.tareas = []
+
+    def agregar_tarea(self, descripcion):   #Este metodo permite agregar una tarea nueva a nuestra lista de tareas
+        nueva_tarea = Tarea(descripcion)   #Describe nuestra tarea
+        self.tareas.append(nueva_tarea)    # Introducimos una nueva tarea a nuestra lista de taras
+
+    def marcar_tarea_completada(self, indice):     #Marcamos nuestra tarea como completada
+        try:
+            self.tareas[indice].marcar_completada()  
+        except IndexError:                                                        #Si se produce un index error,  se imprime un mensaje de error indicando que la tarea 
+            print("Error: La tarea con el índice especificado no existe.")          #con el índice especificado no existe. ()
+
+    def mostrar_tareas(self):    #Mostraremos todas las tareas que hemos añadido
+        if not self.tareas:
+            print("No hay tareas pendientes.")   #Si no tenemos tareas pendientes se mostrará 'No hay tareas pendientes'
+        else:
+            for i, tarea in enumerate(self.tareas):
+                print(f"{i}. {tarea}")
+
+    def eliminar_tarea(self, indice):   #Si deseamos eleminar una tarea de nuestra lista  utilizaremos este comando
+        try:
+            self.tareas.pop(indice)
+        except IndexError:
+            print("Error: La tarea con el índice especificado no existe.")
+            
+#FUNCION PRINCIPAL DE INTERACCION CON EL USUARIO
+
+def mostrar_menu():                                                  #Crearemos un menu con todas las opciones disponibles, agregar tarea, marcar como completada
+    print("\n\033[33mSISTEMA DE GESTIÓN DE TAREAS DIARIO \033[0m")   # mostar todas las tareas, eliminar una tarea, salir
+    print("=====================================")
+    print("\033[36m1. || Agregar una nueva tarea\033[0m")
+    print("\033[32m2. || Marcar una tarea como completada\033[0m")
+    print("\033[34m3. || Mostrar todas las tareas\033[0m")
+    print("\033[31m4. || Eliminar una tarea\033[0m")
+    print("\033[35m5. || Salir\033[0m")
+
+def main():
+    lista_de_tareas = ListaDeTareas()
+
+    while True:
+        mostrar_menu()
+        try:
+            opcion = int(input("\033[37mSeleccione una opción: \033[0m"))
+        except ValueError:
+            print("Error: Por favor, ingrese un número válido.")                   #Si ingresamos un numero que no está entre los valores que hemos establecido
+            continue                                                               #Nos indicará que ingesemos un numero valido
+
+        if opcion == 1:
+            descripcion = input("Ingrese la descripción de la nueva tarea: ")     #Desde aqui podemos añadir  una descripcion de la nueva tarea
+            lista_de_tareas.agregar_tarea(descripcion)
+        elif opcion == 2:
+            try:
+                indice = int(input("Ingrese el índice de la tarea a marcar como completada: "))   #Utilizaremos condicionales para determinar
+                lista_de_tareas.marcar_tarea_completada(indice)                                   # si está completada, si no esta completada, la lista de tareas
+            except ValueError:                                                                    #Si no hemos ingresado un número válido nos saldrá como error
+                print("Error: Por favor, ingrese un número válido.")
+        elif opcion == 3:
+            lista_de_tareas.mostrar_tareas()
+        elif opcion == 4:
+            try:
+                indice = int(input("Ingrese el índice de la tarea a eliminar: "))
+                lista_de_tareas.eliminar_tarea(indice)
+            except ValueError:
+                print("Error: Por favor, ingrese un número válido.")
+        elif opcion == 5:
+            print("Saliendo del programa.")
+            break
+        else:
+            print("Error: Opción no válida. Por favor, seleccione una opción del 1 al 5.")   #Nos imprimirá error si seleccionamos un numero
+                                                                                            # que no esté entre el 1 y el 5
+                                                                                            
+#, el bloque if __name__ == "__main__": se utiliza para definir el punto de entrada de un script de Python
+
+if __name__ == "__main__":
+    main()
